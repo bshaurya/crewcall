@@ -1,0 +1,4 @@
+project_id = "bzkapgdbfbbpohiojssu"
+
+[functions.group-attendees]
+verify_jwt = false
