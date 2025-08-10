@@ -94,7 +94,7 @@ const EventSignup = () => {
             </div>
           </div>
           <div className="text-xs text-muted-foreground p-3 bg-muted rounded">
-            We may use your contact info to remind you about the event. To delete your data or for any privacy concerns, email us at <a href="mailto:sb314mldummy@gmail.com" className="underline">sb314mldummy@gmail.com</a>
+            We may use your contact info to remind you about the event. To delete your data or for any privacy concerns, email us at <a href="mailto:sb314mldummy2@gmail.com" className="underline">sb314mldummy2@gmail.com</a>
           </div>
           <Button onClick={submit}>Join event</Button>
 
