@@ -194,7 +194,7 @@ const CompassNavigation = ({ target }: CompassNavigationProps) => {
               <div className="mt-2">
                 {distance < 10 && "🔥 Very close! Vibrating rapidly"}
                 {distance >= 10 && distance < 25 && "📍 Close! Frequent vibrations"}
-                {distance >= 25 && distance < 50 && "🎯 Nearby - regular vibrations"}
+                {distance >= 25 && distance < 50 && "🎯 Nearby. Regular vibrations"}
                 {distance >= 50 && distance < 100 && "🚶 Getting closer"}
                 {distance >= 100 && "🗺️ Keep walking"}
               </div>

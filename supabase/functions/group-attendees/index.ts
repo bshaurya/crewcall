@@ -54,21 +54,44 @@ serve(async (req) => {
       }
 
       const shuffled = [...attendees].sort(() => Math.random() - 0.5);
-      const assignments: Array<{ event_id: string; attendee_id: string; spot_id: string } | null> = [];
-      let idx = 0;
-      for (const spot of spots) {
-        const capacity = Number(spot.capacity ?? event.group_size ?? 5);
-        for (let i = 0; i < capacity && idx < shuffled.length; i++) {
-          const attendee = shuffled[idx++];
-          assignments.push({ event_id: event.id, attendee_id: attendee.id, spot_id: spot.id });
+      const assignments: Array<{ event_id: string; attendee_id: string; spot_id: string }> = [];
+      const totalCapacity = spots.reduce((sum, spot) => sum + Number(spot.capacity ?? event.group_size ?? 5), 0);
+      const eventStartTime = new Date(event.start_time).getTime();
+      const timeUntilEvent = eventStartTime - nowTs;
+      const fifteenMinutes = 15 * 60 * 1000;
+      const allowOverfill = timeUntilEvent <= fifteenMinutes || shuffled.length > totalCapacity;
+      
+      if (allowOverfill) {
+        let spotIndex = 0;
+        for (let i = 0; i < shuffled.length; i++) {
+          assignments.push({
+            event_id: event.id,
+            attendee_id: shuffled[i].id,
+            spot_id: spots[spotIndex].id
+          });
+          spotIndex = (spotIndex + 1) % spots.length;
         }
-      }
-
-      while (idx < shuffled.length) {
+      } else {
+        let idx = 0;
         for (const spot of spots) {
-          if (idx >= shuffled.length) break;
-          const attendee = shuffled[idx++];
-          assignments.push({ event_id: event.id, attendee_id: attendee.id, spot_id: spot.id });
+          const capacity = Number(spot.capacity ?? event.group_size ?? 5);
+          for (let i = 0; i < capacity && idx < shuffled.length; i++) {
+            assignments.push({
+              event_id: event.id,
+              attendee_id: shuffled[idx++].id,
+              spot_id: spot.id
+            });
+          }
+        }
+        
+        let spotIndex = 0;
+        while (idx < shuffled.length) {
+          assignments.push({
+            event_id: event.id,
+            attendee_id: shuffled[idx++].id,
+            spot_id: spots[spotIndex].id
+          });
+          spotIndex = (spotIndex + 1) % spots.length;
         }
       }
 
